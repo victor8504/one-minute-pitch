@@ -1,6 +1,7 @@
 import os
 
 class Config:
+    SECRET_KEY = 'vnju'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'postgresql+psycopg2://victor:vnju@localhost/pitches')
 
 class ProdConfig(Config):

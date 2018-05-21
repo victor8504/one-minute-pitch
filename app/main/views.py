@@ -15,7 +15,7 @@ def index():
 
     title = '60 SECOND PITCH !!!'
 
-        return render_template('index.html', title = title)
+    return render_template('index.html', title = title)
 
 @main.route('/user/<uname>')
 @login_required
