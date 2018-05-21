@@ -5,6 +5,18 @@ from flask_login import login_required
 from .. import db
 import markdown2
 
+@main.route('/')
+@login_required
+def index():
+
+    '''
+    View root page function that returns the index page and its data
+    '''
+
+    title = '60 SECOND PITCH !!!'
+
+        return render_template('index.html', title = title)
+
 @main.route('/user/<uname>')
 @login_required
 def profile(uname):
