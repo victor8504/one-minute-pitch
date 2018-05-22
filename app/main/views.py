@@ -1,6 +1,6 @@
 from flask import render_template,request,redirect,url_for,abort
 from . import main
-from ..models import User
+from ..models import User,Pitch,Category
 from flask_login import login_required
 from .. import db
 import markdown2
@@ -15,7 +15,11 @@ def index():
 
     title = '60 SECOND PITCH !!!'
 
-    return render_template('index.html', title = title)
+    categories = Category.query.all()
+
+    # return categories
+
+    return render_template('index.html', title = title, categories = categories)
 
 @main.route('/user/<uname>')
 @login_required
@@ -26,3 +30,12 @@ def profile(uname):
         abort(404)
     
     return render_template("profile/profile.html", user = user)
+
+@main.route('/lines/')
+@login_required
+def lines():
+
+    pitches = Pitch.query.get(categories.id)
+
+
+    return render_template("pitch/pitch.html")
