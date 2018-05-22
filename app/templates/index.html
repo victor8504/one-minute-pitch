@@ -16,22 +16,34 @@
         </div>
                 
             <h2 class="text-center">CATEGORIES</h2>
-            <hr>
+            <!-- <hr>
             <p class="text-center">
-                <a class="btn btn-outline-info btn-lg" data-toggle="collapse" href="#pickUpLines" role="button" aria-expanded="false" aria-controls="collapseExample">PICK UP LINES</a>
+                <a class="btn btn-outline-info btn-lg" href="lines" role="button" aria-expanded="false" aria-controls="collapseExample">PICK UP LINES</a>
                 <p class="text-center">A pick-up line or chat-up line is a conversation opener with the intent of engaging an unfamiliar person for romance or dating.</p>
                 <hr>
             <p class="text-center">
-                <a class="btn btn-outline-info btn-lg" data-toggle="collapse" href="#interviews" role="button" aria-expanded="false" aria-controls="collapseExample">INTERVIEWS</a>
-                <p class="text-center">Knowing how to pitch your achievements and career goals at interviews, assessment centres and careers fairs could be crucial <br> in landing yourself a graduate job.</p>
+                <a class="btn btn-outline-info btn-lg" href="#interviews" role="button" aria-expanded="false" aria-controls="collapseExample">INTERVIEWS</a>
+                <p class="text-center">Knowing how to pitch your achievements and career goals at interviews, assessment centres and careers fairs could be crucial in landing yourself a graduate job.</p>
                 <hr>
-            <p class="text-center">
-                <a class="btn btn-outline-info btn-lg" data-toggle="collapse" href="#products" role="button" aria-expanded="false" aria-controls="collapseExample">PRODUCTS</a>
+                <p class="text-center">
+                <a class="btn btn-outline-info btn-lg" href="#products" role="button" aria-expanded="false" aria-controls="collapseExample">PRODUCTS</a>
                 <p class="text-center">One thing that strikes fear into the hearts of business owners everywhere.</p>
                 <hr>
             <p class="text-center">
-                <a class="btn btn-outline-info btn-lg" data-toggle="collapse" href="#promotions" role="button" aria-expanded="false" aria-controls="collapseExample">PROMOTIONS</a>
-                <p class="text-center">Pitching a promotion can be a daunting task if you’re not prepared. Refine your approach here.</p>                        
+                <a class="btn btn-outline-info btn-lg" href="#promotions" role="button" aria-expanded="false" aria-controls="collapseExample">PROMOTIONS</a>
+                <p class="text-center">Pitching a promotion can be a daunting task if you’re not prepared. Refine your approach here.</p> -->
+                
+            <hr>
+            {% for category in categories %}
+                {% if category %}
+                    <p class="text-center">
+                        <a class="btn btn-outline-info btn-lg" href="lines" role="button" aria-expanded="false" aria-controls="collapseExample">{{category.name}}</a>
+                        <p class="text-center">{{category.description}}</p>
+                    
+                {% else %}
+                    <p>No Categories available</p>
+                {% endif %}
+            {% endfor %}
     </div>
     
 {% endblock %}
