@@ -2,6 +2,7 @@ from . import db
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 from . import login_manager
+from datetime import datetime
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -13,7 +14,6 @@ class Category(db.Model):
     '''
     __tablename__ = 'categories'
 
-    # add columns
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(255))
     description = db.Column(db.String(255))
@@ -33,6 +33,38 @@ class Category(db.Model):
         '''
         categories = Category.query.all()
         return categories
+
+class Pitch(db.Model):
+    '''
+    List of pitches in each category
+    '''
+
+    __tablename__ = 'pitches'
+
+    id = db.Column(db.Integer,primary_key = True)
+    title = db.Column(db.String(255))
+    content = db.Column(db.String(255))
+    date_posted = db.Column(db.DateTime,default=datetime.utcnow)
+
+    
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
+    category_id = db.Column(db.Integer,db.ForeignKey("categories.id"))
+
+    def save_pitch(self):
+        '''
+        Save the pitches
+        '''
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def clear_pitches(cls):
+        Pitch.all_pitches.clear()
+
+    @classmethod
+    def get_pitches(cls,id):
+        pitches = Pitch.query.order_by(Pitch.date_posted.desc()).filter_by(category_id=id).all()
+        return pitches
 
 class User(UserMixin,db.Model):
     __tablename__ = 'users'
