@@ -50,6 +50,9 @@ class Pitch(db.Model):
     user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
     category_id = db.Column(db.Integer,db.ForeignKey("categories.id"))
 
+    comments = db.relationship("Comments", backref="pitch", lazy = "dynamic")
+
+
     def save_pitch(self):
         '''
         Save the pitches
@@ -65,6 +68,31 @@ class Pitch(db.Model):
     def get_pitches(cls,id):
         pitches = Pitch.query.order_by(Pitch.date_posted.desc()).filter_by(category_id=id).all()
         return pitches
+
+class Comments(db.Model):
+    '''
+    Comment class that creates new comments from users in pitches
+    '''
+    __tablename__ = 'comments'
+
+    id = db.Column(db. Integer,primary_key = True)
+    comments_section_id = db.Column(db.String(255))
+    date_posted = db.Column(db.DateTime,default=datetime.utcnow)
+
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id"))
+    pitches_id = db.Column(db.Integer,db.ForeignKey("pitches.id"))
+
+    def save_comments(self):
+        '''
+        Save the comments per pitch
+        '''
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(self,id):
+        comments = Comments.query.order_by(Comments.date_posted.desc()).filter_by(pitches_id=id).all()
+        return comments
 
 class User(UserMixin,db.Model):
     __tablename__ = 'users'
