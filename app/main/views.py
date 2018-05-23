@@ -17,8 +17,6 @@ def index():
 
     categories = Category.query.all()
 
-    # return categories
-
     return render_template('index.html', title = title, categories = categories)
 
 @main.route('/user/<uname>')
@@ -31,11 +29,21 @@ def profile(uname):
     
     return render_template("profile/profile.html", user = user)
 
-@main.route('/lines/')
+@main.route('/category/<int:id>')
 @login_required
-def lines():
+def category(id):
+    '''
+    a route function that returns a list of pitches as per category chosen and 
+    allows users to create a new pitch
+    '''
 
-    pitches = Pitch.query.get(categories.id)
+    categories = Category.query.get(id)
 
+    if category is None:
+        abort(404)
+        
+    pitches = Pitch.get_pitches(id)
+    title = "PITCHES"
+    return render_template('category.html', title = title, categories = categories, pitches = pitches)
 
-    return render_template("pitch/pitch.html")
+    
