@@ -3,6 +3,7 @@ from . import main
 from ..models import User,Pitch,Category
 from flask_login import login_required
 from .. import db
+from .forms import PitchForm,CommentForm
 import markdown2
 
 @main.route('/')
@@ -15,7 +16,8 @@ def index():
 
     title = '60 SECOND PITCH !!!'
 
-    categories = Category.query.all()
+    
+    categories = Category.get_categories()
 
     return render_template('index.html', title = title, categories = categories)
 
@@ -37,13 +39,47 @@ def category(id):
     allows users to create a new pitch
     '''
 
-    categories = Category.query.get(id)
+    category = Category.query.get(id)
 
     if category is None:
         abort(404)
         
-    pitches = Pitch.get_pitches(id)
+    pitches = Pitch.query.filter_by(category_id=id).all()
+    print(pitches)
     title = "PITCHES"
-    return render_template('category.html', title = title, categories = categories, pitches = pitches)
+    return render_template('category.html', title = title, category=category, pitches = pitches)
+
+@main.route('/pitch/new/', methods = ['GET', 'POST'])
+@login_required
+def new_pitch():
+    form = PitchForm()
+    # category = Category.query.filter_by(id=id).first()
+
+    if form.validate_on_submit():
+        pitch = form.content.data
+        # category_id = form.category_id.data
+        new_pitch = Pitch()
+
+        new_pitch.save_pitch()
+        return redirect(url_for('main.index'))
+
+    return render_template('new_pitch.html', new_pitch_form = form, category = category)
+
+@main.route('/pitch/<int:id>', methods = ['GET','POST'])
+@login_required
+def single_pitch(id):
+    '''
+    Function the returns a single pitch for comment to be added
+    '''
+
+    pitches = Pitch.query.get(id)
+
+    if pitches is None:
+        abort(404)
+
+    comment = Comments.get_comments(id)
+    title = 'Comment Section'
+    return render_template('pitch.html', title = title, pitches = pitches, comment = comment)
+
 
     
